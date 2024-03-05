@@ -5,9 +5,11 @@ const morgan = require("morgan");
 const PORT = 3001;
 
 app.use(express.json());
-app.use(morgan('tiny'));
+app.use(morgan('tiny', {
+  skip: function (req, res) { return req.method === 'POST'}
+}));
 
-morgan.token('data', function getHeaders(req) { 
+morgan.token('data', function getHeaders(req) {
   return req.data;
 })
 
