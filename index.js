@@ -122,7 +122,7 @@ app.delete("/api/persons/:id", (req, res) => {
   
   dataSrc = phonebookUpdated;
 
-  res.status(204).end();
+  res.end();
 });
 
 app.listen(PORT, () => console.log(`server running at PORT ${PORT}`));
