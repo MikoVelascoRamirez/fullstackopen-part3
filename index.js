@@ -91,7 +91,7 @@ app.post("/api/persons", assignContentType, postLog, (req, res, next) => {
 
   dataSrc = [...dataSrc, { id: generateNewId(), ...body }]
   
-  res.status(201).send({"message" : "contact created"});
+  res.status(201).send(dataSrc[dataSrc.length-1]);
 });
 
 app.get("/api/persons", (req, res) => {
