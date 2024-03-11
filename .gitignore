@@ -2,3 +2,4 @@ node_modules/
 repl.deploy
 .replit
 replit.nix
+.env
