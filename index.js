@@ -59,19 +59,14 @@ app.post("/api/persons", assignContentType, postLog, (req, res, next) => {
 
   body.name = formattingName;
 
-  const isTheNameExists = dataSrc.some(
-    contact => contact.name === formattingName
-  )
+  const contact = new Contact({
+    name: body.name,
+    number: body.number
+  })
 
-  if(isTheNameExists){
-    return res.status(400).send({ 
-      "error" : "The name already exists."
-    });
-  }
-
-  dataSrc = [...dataSrc, { id: generateNewId(), ...body }]
+  contact.save()
+    .then(result => res.status(201).json(result))
   
-  res.status(201).send(dataSrc[dataSrc.length-1]);
 });
 
 app.get("/api/persons", (req, res) => {
