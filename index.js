@@ -1,9 +1,12 @@
+require('dotenv').config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
 const morgan = require("morgan");
 
-const PORT = process.env.PORT || 3001;
+const Contact = require('./Models/Contact');
+
+const PORT = process.env.PORT;
 
 app.use(express.static('dist'));
 
@@ -97,7 +100,9 @@ app.post("/api/persons", assignContentType, postLog, (req, res, next) => {
 });
 
 app.get("/api/persons", (req, res) => {
-  res.json(dataSrc);
+  // res.json(dataSrc);
+  Contact.find({})
+    .then(result => res.json(result))
 });
 
 app.get("/info", (req, res) => {
