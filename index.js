@@ -82,7 +82,10 @@ app.get("/info", (req, res) => {
 
 app.get("/api/persons/:id", (req, res) => {
   const param = Number(req.params.id);
-  const contactFound = dataSrc.find(contact => contact.id === param);
+  Contact.findById(param)
+    .then(contact => {
+      res.json(contact)
+    })
 
   if(!contactFound) 
     return res.status(404).send("The contact has not been found").end();
