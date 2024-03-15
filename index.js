@@ -61,9 +61,12 @@ app.get("/api/persons", (req, res) => {
     .then(result => res.json(result))
 });
 
-app.get("/info", (req, res) => {
-  const template = `<p>Phonebook has info for ${dataSrc.length} people</p><p>${new Date().toString()}</p>`;
-  res.send(template);
+app.get("/info", (req, res, next) => {
+  Contact.find({})
+    .then(result => {
+      res.send(`<p>Phonebook has info for ${result.length} people</p><p>${new Date().toString()}</p>`)
+    })
+    .catch(err => next(err))
 });
 
 app.get("/api/persons/:id", (req, res) => {
