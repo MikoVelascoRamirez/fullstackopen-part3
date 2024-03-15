@@ -24,20 +24,6 @@ morgan.token('data', function getHeaders(req) {
 const postLog = morgan(':method :url :status :res[content-length] - :response-time ms :data');
 
 // Functions
-const generateNewId = () => {
-  let idGenerated;
-  while(true){
-    idGenerated = Math.round(
-      Math.random() * (1000 - dataSrc.length) + dataSrc.length
-    );
-    const findIfIdContactExists = dataSrc.some(
-      contact => contact.id === idGenerated
-    );
-    if(!findIfIdContactExists) break;
-  }
-
-  return idGenerated;
-}
 
 function assignContentType(req, res, next) {
   req.data = JSON.stringify(req.body);
