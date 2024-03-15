@@ -69,17 +69,18 @@ app.get("/info", (req, res, next) => {
     .catch(err => next(err))
 });
 
-app.get("/api/persons/:id", (req, res) => {
-  const param = Number(req.params.id);
+app.get("/api/persons/:id", (req, res, next) => {
+  const param = req.params.id;
   Contact.findById(param)
     .then(contact => {
-      res.json(contact)
-    })
-
-  if(!contactFound) 
-    return res.status(404).send("The contact has not been found").end();
-
-  res.json(contactFound).end();
+      if(!contact){
+        const customError = new Error("The contact doesn't exist.");
+        customError.name = "ContactNotFound";
+        next(customError);
+      }else{
+        res.send(contact)
+      }
+    }).catch(err => next(err))
 });
 
 app.put("/api/persons/:id", (req, res, next) => {
