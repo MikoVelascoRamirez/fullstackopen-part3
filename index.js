@@ -97,12 +97,17 @@ app.delete("/api/persons/:id", (req, res) => {
   const param = Number(req.params.id);
   const phonebookUpdated = dataSrc.filter(contact => contact.id !== param);
 
-  if(phonebookUpdated.length === dataSrc.length)
-    return res.status(404).send("The contact doesn't exist");
-  
-  dataSrc = phonebookUpdated;
+const handlingError = (err, req, res, next) => {
+  console.log(err.name);
+  console.log(err.message);
 
-  res.end();
-});
+  if(err.name === 'ContactNotFound'){
+    res.status(404).send({ message: err.message })
+  }
+  
+  next(err);
+}
+
+app.use(handlingError);
 
 app.listen(PORT, () => console.log(`server running at PORT ${PORT}`));
