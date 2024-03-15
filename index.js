@@ -79,6 +79,22 @@ app.get("/api/persons/:id", (req, res) => {
   res.json(contactFound).end();
 });
 
+app.put("/api/persons/:id", (req, res, next) => {
+  const param = req.params.id;
+  const bodyToUpdate = req.body;
+
+  Contact.findByIdAndUpdate(param, bodyToUpdate, { new : true })
+    .then(result => {
+      if(!result){
+        const customError = new Error("Not able to update, the contact doesn't exist.");
+        customError.name = "ContactNotFound";
+        next(customError);
+      }
+      res.json(result)
+    })
+    .catch(err => next(err));
+});
+
 app.delete("/api/persons/:id", (req, res, next) => {
 
   Contact.findByIdAndDelete(req.params.id)
@@ -103,8 +119,6 @@ const handlingError = (err, req, res, next) => {
   if(err.name === 'ContactNotFound'){
     res.status(404).send({ message: err.message })
   }
-  
-  next(err);
 }
 
 app.use(unknownEndpoint);
