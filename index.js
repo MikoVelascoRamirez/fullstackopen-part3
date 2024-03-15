@@ -52,6 +52,7 @@ app.post("/api/persons", assignContentType, postLog, (req, res, next) => {
 
   contact.save()
     .then(result => res.status(201).json(result))
+    .catch(err => next(err))
   
 });
 
@@ -77,9 +78,7 @@ app.get("/api/persons/:id", (req, res, next) => {
         const customError = new Error("The contact doesn't exist.");
         customError.name = "ContactNotFound";
         next(customError);
-      }else{
-        res.send(contact)
-      }
+      } else res.send(contact)
     }).catch(err => next(err))
 });
 
@@ -93,8 +92,7 @@ app.put("/api/persons/:id", (req, res, next) => {
         const customError = new Error("Not able to update, the contact doesn't exist.");
         customError.name = "ContactNotFound";
         next(customError);
-      }
-      res.json(result)
+      } else res.json(result)
     })
     .catch(err => next(err));
 });
@@ -107,8 +105,7 @@ app.delete("/api/persons/:id", (req, res, next) => {
         const customError = new Error("The contact doesn't exist.");
         customError.name = "ContactNotFound";
         next(customError);
-      }
-      res.status(204).end();
+      } else res.end();
     }).catch(err => next(err))
 });
 
