@@ -93,9 +93,22 @@ app.get("/api/persons/:id", (req, res) => {
   res.json(contactFound).end();
 });
 
-app.delete("/api/persons/:id", (req, res) => {
-  const param = Number(req.params.id);
-  const phonebookUpdated = dataSrc.filter(contact => contact.id !== param);
+app.delete("/api/persons/:id", (req, res, next) => {
+
+  Contact.findByIdAndDelete(req.params.id)
+    .then(result => {
+      if(!result){
+        const customError = new Error("The contact doesn't exist.");
+        customError.name = "ContactNotFound";
+        next(customError);
+      }
+      res.status(204).end();
+    }).catch(err => next(err))
+});
+
+const unknownEndpoint = (req, res) => {
+  res.status(404).send({ message: "unknown url" })
+}
 
 const handlingError = (err, req, res, next) => {
   console.log(err.name);
@@ -108,6 +121,7 @@ const handlingError = (err, req, res, next) => {
   next(err);
 }
 
+app.use(unknownEndpoint);
 app.use(handlingError);
 
 app.listen(PORT, () => console.log(`server running at PORT ${PORT}`));
