@@ -76,7 +76,11 @@ app.put("/api/persons/:id", (req, res, next) => {
   const param = req.params.id;
   const bodyToUpdate = req.body;
 
-  Contact.findByIdAndUpdate(param, bodyToUpdate, { new : true })
+  Contact.findByIdAndUpdate(param, bodyToUpdate, { 
+    new : true,
+    runValidators: true,
+    context: 'query'
+  })
     .then(result => {
       if(!result){
         const customError = new Error("Not able to update, the contact doesn't exist.");
