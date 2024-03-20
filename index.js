@@ -35,18 +35,8 @@ function assignContentType(req, res, next) {
 app.post("/api/persons", assignContentType, postLog, (req, res, next) => {
   let body = req.body;
 
-  if(!body.name || !body.number){
-    return res.status(400).send({ 
-      "error" : "Contact info missing"
-    });
-  }
-
-  const formattingName = body.name.split(' ').filter(c => c !== '').join(' ');
-
-  body.name = formattingName;
-
   const contact = new Contact({
-    name: body.name,
+    name: body.name?.split(' ').filter(c => c !== '').join(' '),
     number: body.number
   })
 
