@@ -113,7 +113,11 @@ const handlingError = (err, req, res, next) => {
 
   if(err.name === 'ContactNotFound'){
     res.status(404).send({ message: err.message })
+  } else if(err.name === "ValidationError"){
+    res.status(404).send({ message: err.message })
   }
+
+  next(err)
 }
 
 app.use(unknownEndpoint);
