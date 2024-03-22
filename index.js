@@ -14,7 +14,7 @@ app.use(cors());
 
 app.use(express.json());
 app.use(morgan('tiny', {
-  skip: function (req, res) { return req.method === 'POST'}
+  skip: function (req) { return req.method === 'POST'}
 }));
 
 morgan.token('data', function getHeaders(req) {
@@ -43,7 +43,7 @@ app.post("/api/persons", assignContentType, postLog, (req, res, next) => {
   contact.save()
     .then(result => res.status(201).json(result))
     .catch(err => next(err))
-  
+
 });
 
 app.get("/api/persons", (req, res) => {
@@ -76,7 +76,7 @@ app.put("/api/persons/:id", (req, res, next) => {
   const param = req.params.id;
   const bodyToUpdate = req.body;
 
-  Contact.findByIdAndUpdate(param, bodyToUpdate, { 
+  Contact.findByIdAndUpdate(param, bodyToUpdate, {
     new : true,
     runValidators: true,
     context: 'query'
